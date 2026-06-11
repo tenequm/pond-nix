@@ -30,6 +30,7 @@
           apps.pond = {
             type = "app";
             program = "${self'.packages.pond}/bin/pond";
+            meta.description = "Run the pond CLI";
           };
           apps.default = self'.apps.pond;
 
