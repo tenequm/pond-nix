@@ -1,17 +1,17 @@
-{ lib, fetchurl, stdenv, autoPatchelfHook, zlib }:
+{ lib, fetchurl, stdenv, autoPatchelfHook, installShellFiles, zlib }:
 let
   inherit (stdenv) hostPlatform;
   inherit (hostPlatform) system;
-  version = "0.7.0";
+  version = "0.8.0";
   shaMap = {
-    x86_64-linux = "0d05bvn1cm60cfjmlrjjpr9pwkm9dfp0sif65dx2nb82lzs6q80c";
-    aarch64-linux = "1vn8rla9p9z2nn0r2dkqxkcwwv2fvs0q6fj6s4hflh6aaa4f5vkw";
-    aarch64-darwin = "14ijpdj4c4kvccvsnnzk4hasbfx64grnjxbykmkxrci10cd4md3k";
+    x86_64-linux = "1dyl1lgrsprvc0yzkvm8lb5gpyk4rl0ppzhjxqrcqyq3ls4g15mn";
+    aarch64-linux = "1mfywj747b1gs4dym4vxnh70sy94gys30svdv28yz3671shnivmj";
+    aarch64-darwin = "1hnaqxsdmn3g71xk02wxa6r9pmcbjdihrkgd63f8xsr6yb752bm0";
   };
   urlMap = {
-    x86_64-linux = "https://github.com/tenequm/pond-nix/releases/download/pond-v0.7.0/pond-x86_64-unknown-linux-gnu.tar.xz";
-    aarch64-linux = "https://github.com/tenequm/pond-nix/releases/download/pond-v0.7.0/pond-aarch64-unknown-linux-gnu.tar.xz";
-    aarch64-darwin = "https://github.com/tenequm/pond-nix/releases/download/pond-v0.7.0/pond-aarch64-apple-darwin.tar.xz";
+    x86_64-linux = "https://github.com/tenequm/pond-nix/releases/download/pond-v0.8.0/pond-x86_64-unknown-linux-gnu.tar.xz";
+    aarch64-linux = "https://github.com/tenequm/pond-nix/releases/download/pond-v0.8.0/pond-aarch64-unknown-linux-gnu.tar.xz";
+    aarch64-darwin = "https://github.com/tenequm/pond-nix/releases/download/pond-v0.8.0/pond-aarch64-apple-darwin.tar.xz";
   };
 in
 stdenv.mkDerivation {
@@ -27,15 +27,19 @@ stdenv.mkDerivation {
 
   # Prebuilt glibc ELF won't run on NixOS until its interpreter and RPATH
   # are rewritten to Nix-store paths; darwin Mach-O needs no patching.
-  nativeBuildInputs = lib.optionals hostPlatform.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals hostPlatform.isLinux [ autoPatchelfHook ];
 
   # The released Linux build is CPU-only candle + vendored onig + rustls,
   # so the sole dynamic deps beyond glibc are libgcc_s/libstdc++.
   buildInputs = lib.optionals hostPlatform.isLinux [ stdenv.cc.cc.lib zlib ];
 
+  # Completions ship pre-generated in the tarball: the binary can't
+  # run here (autoPatchelfHook rewrites the interpreter later, in
+  # fixupPhase).
   installPhase = ''
     runHook preInstall
     install -Dm755 pond $out/bin/pond
+    installShellCompletion --bash completions/pond.bash --zsh completions/_pond --fish completions/pond.fish
     runHook postInstall
   '';
 
