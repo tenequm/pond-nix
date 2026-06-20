@@ -2,16 +2,16 @@
 let
   inherit (stdenv) hostPlatform;
   inherit (hostPlatform) system;
-  version = "0.9.0";
+  version = "0.10.0";
   shaMap = {
-    x86_64-linux = "0mb3vaivrcnyb1v7f4maqkiksill7wgs0s5bdkgqjyjgl9s14grf";
-    aarch64-linux = "1yn30kg1z26y8mdg6i5516pjgr3b1cw4my984hz8zh7d1a7cqnsr";
-    aarch64-darwin = "17m9d1mm06qy9spn11mdjg2kng7apfrgzh13xpb96nf8nc2xz000";
+    x86_64-linux = "0qj60l0yy1yndya3bgb0v2cj8wrwq4jpa8a52nv4wgzr8wsk0i7f";
+    aarch64-linux = "1gi7xjsh85r2krzdnlxxr8ab9pm3ysmr09vmdcqr9b2y2mkixw92";
+    aarch64-darwin = "0hj0ycrmjwqbp6k4071853842rv7m2k3rcviiarfvzc70vhhsc2f";
   };
   urlMap = {
-    x86_64-linux = "https://github.com/tenequm/pond-nix/releases/download/pond-v0.9.0/pond-x86_64-unknown-linux-gnu.tar.xz";
-    aarch64-linux = "https://github.com/tenequm/pond-nix/releases/download/pond-v0.9.0/pond-aarch64-unknown-linux-gnu.tar.xz";
-    aarch64-darwin = "https://github.com/tenequm/pond-nix/releases/download/pond-v0.9.0/pond-aarch64-apple-darwin.tar.xz";
+    x86_64-linux = "https://github.com/tenequm/pond-nix/releases/download/pond-v0.10.0/pond-x86_64-unknown-linux-gnu.tar.xz";
+    aarch64-linux = "https://github.com/tenequm/pond-nix/releases/download/pond-v0.10.0/pond-aarch64-unknown-linux-gnu.tar.xz";
+    aarch64-darwin = "https://github.com/tenequm/pond-nix/releases/download/pond-v0.10.0/pond-aarch64-apple-darwin.tar.xz";
   };
 in
 stdenv.mkDerivation {
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Lossless storage and hybrid search for sessions from any AI agent client";
-    homepage = "https://pond.cascade.fyi/";
+    homepage = "https://pond.locker/";
     changelog = "https://github.com/tenequm/pond-nix/releases/tag/pond-v${version}";
     license = lib.licenses.asl20;
     mainProgram = "pond";
